@@ -16,3 +16,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; */
 }
+
+.selected {
+  background-color: rgb(24, 38, 160);
+}
+
+.correct {
+  background-color: rgb(47, 196, 34);
+}
+
+.incorrect {
+  background-color: rgb(196, 34, 34);
+}
