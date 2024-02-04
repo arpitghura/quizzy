@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import parse from "html-react-parser";
+import { useNavigate } from "react-router-dom";
+import ResultPage from "./ResultPage";
 
 const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
   const [correctAnswers, setCorrectAnswers] = useState([]);
@@ -8,7 +10,7 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(30);
 
   const [score, setScore] = useState(0);
   const [isQuizOver, setIsQuizOver] = useState(false);
@@ -19,19 +21,32 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
 
   const uri = `https://opentdb.com/api.php?amount=${noOfQuestions}&difficulty=${difficulty}&type=multiple`;
 
+  const options = document.querySelectorAll(".option");
+  const submitBtn = document.querySelector("#submitBtn");
+  const nextBtn = document.querySelector("#nextBtn");
+
   const handleNext = () => {
     // save user selection
     // fetch next question
+
+    if (currentQuestion + 1 === noOfQuestions) {
+      setIsQuizOver(true);
+      clearInterval(intervalTimer);
+      nextBtn.textContent = "Finish";
+      console.log("Quiz Over from next");
+      return;
+    }
+
     clearClasses();
-    setCurrentQuestion((prev) => prev + 1);
     clearInterval(intervalTimer);
-    setIsTimerRunning(true);
+    setTimer(30);
     setUserSelection(null);
-    setTimer(60);
+    setIsTimerRunning(true);
+    submitBtn.disabled = false;
+    setCurrentQuestion((prev) => prev + 1);
   };
 
   const clearClasses = () => {
-    const options = document.querySelectorAll(".option");
     options.forEach((option) => {
       option.classList.remove("selected");
       option.classList.remove("correct");
@@ -45,17 +60,18 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
     clearClasses();
     // add selected class to the clicked option
     e.target.classList.add("selected");
-
     // save user selection
     setUserSelection(e.target.id);
   };
 
   const handleSubmit = () => {
     // disable all options
-    const options = document.querySelectorAll(".option");
     options.forEach((option) => {
       option.disabled = true;
     });
+
+    // disable submit button
+    submitBtn.disabled = true;
 
     // stop timer
     setIsTimerRunning(false);
@@ -131,11 +147,12 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
   };
 
   useEffect(() => {
-    setAPIError(false);
-    setIsTimerRunning(false);
-    clearInterval(intervalTimer);
-    setTimer(60);
-    setScore(0);
+    // setAPIError(false);
+    // setIsTimerRunning(false);
+    // clearInterval(intervalTimer);
+    // setIsQuizOver(false);
+    // setTimer(30);
+    // setScore(0);
     clearClasses();
     fetchQuestions();
   }, []);
@@ -162,17 +179,18 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
   }, [timer]);
 
   useEffect(() => {
-    if (currentQuestion === noOfQuestions) {
-      setIsQuizOver(true);
+    if (isQuizOver) {
+      clearInterval(intervalTimer);
+      console.log("Quiz Over");
     }
-  }, [currentQuestion]);
+  }, [isQuizOver]);
 
   return (
     <div>
       {!APIError ? (
-        <>
-          <div className="options flex justify-between p-2 bg-slate-50 w-[100vw]">
-            <div className="bg-white text-black font-medium text-lg rounded-lg px-4 py-2">
+        <div className={`${isQuizOver && "hidden"}`}>
+          <div className="options flex justify-between p-2 w-[100vw] bg-gray-800 shadow-lg shadow-gray-900">
+            <div className="font-medium text-lg rounded-lg px-4 py-2">
               Question {currentQuestion + 1} of {noOfQuestions}
             </div>
             <div
@@ -244,19 +262,21 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
 
           <div className="container options flex flex-row py-6 px-10">
             <button
-              className="py-2 px-6 bg-blue-500 text-white font-base text-lg rounded-lg mr-2"
+              className="py-2 px-6 bg-blue-500 text-white font-base text-lg rounded-lg mr-2 disabled:bg-blue-400"
               onClick={handleSubmit}
+              id="submitBtn"
             >
               Submit
             </button>
             <button
               className="py-2 px-6 bg-violet-500 text-white font-base text-lg rounded-lg"
               onClick={handleNext}
+              id="nextBtn"
             >
               Next
             </button>
           </div>
-        </>
+        </div>
       ) : (
         <div className="flex flex-col justify-center items-center h-[100vh] p-10">
           <img
@@ -270,6 +290,7 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
           </h1>
         </div>
       )}
+      {isQuizOver && <ResultPage score={score} totalScore={noOfQuestions} />}
     </div>
   );
 };
