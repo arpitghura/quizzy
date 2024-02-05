@@ -1,9 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import parse from "html-react-parser";
-import { useNavigate } from "react-router-dom";
 import ResultPage from "./ResultPage";
+import { useLocation } from "react-router-dom";
 
-const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
+const QuizPage = () => {
+  const location = useLocation();
+
+  const noOfQuestions = location?.state?.noOfQuestions || 10;
+  const difficulty = location?.state?.difficulty || "medium";
+
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [allOptions, setAllOptions] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
@@ -32,8 +37,13 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
     if (currentQuestion + 1 === noOfQuestions) {
       setIsQuizOver(true);
       clearInterval(intervalTimer);
-      nextBtn.textContent = "Finish";
+      nextBtn.innerText = "Finish";
       console.log("Quiz Over from next");
+      return;
+    }
+
+    if (userSelection !== null) {
+      handleSubmit();
       return;
     }
 
@@ -94,65 +104,64 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
         )[0];
         correctOption.classList.add("correct");
       }
+
+      // set user selection to null
+      setUserSelection(null);
     }
   };
 
   const fetchQuestions = async () => {
-    const res = await fetch(uri);
-    const data = await res.json();
+    try {
+      const res = await fetch(uri);
+      const data = await res.json();
 
-    console.log("Data: ", data);
-    if (data.response_code !== 0) {
-      console.log(`Error: `, data.response_code);
+      if (data.response_code !== 0) {
+        throw data.response_code;
+      }
+
+      console.log(data.results);
+
+      const correctAns = data.results.map((ques) => {
+        if (ques.correct_answer.includes("&")) {
+          return parse(ques.correct_answer);
+        }
+        return ques.correct_answer;
+      });
+
+      const allOptions = data.results.map((ques) => {
+        let options = [...ques.incorrect_answers, ques.correct_answer];
+        // check if options contain html entities
+        options = options
+          .map((option) => {
+            if (option.includes("&")) {
+              return parse(option);
+            }
+            return option;
+          })
+          .sort(() => Math.random() - 0.5);
+        return options;
+      });
+
+      const allQuestions = data.results.map((ques) => {
+        // check if question contains html entities
+        if (ques.question.includes("&")) {
+          return parse(ques.question);
+        }
+        return ques.question;
+      });
+
+      setCorrectAnswers(correctAns);
+      setAllOptions(allOptions);
+      setAllQuestions(allQuestions);
+      setIsTimerRunning(true);
+    } catch (err) {
+      console.log(err);
       setAPIError(true);
       return;
     }
-
-    // set correct answers
-    const correctAns = data.results.map((ques) => {
-      return ques.correct_answer;
-    });
-
-    setCorrectAnswers(correctAns);
-
-    // all options (correct and incorrect)
-    const allOptions = data.results.map((ques) => {
-      let options = [...ques.incorrect_answers, ques.correct_answer];
-      // check if options contain html entities
-      options = options
-        .map((option) => {
-          if (option.includes("&")) {
-            return parse(option);
-          }
-          return option;
-        })
-        .sort(() => Math.random() - 0.5);
-      return options;
-    });
-
-    setAllOptions(allOptions);
-
-    // get all questions
-    const allQuestions = data.results.map((ques) => {
-      // check if question contains html entities
-      if (ques.question.includes("&")) {
-        return parse(ques.question);
-      }
-      return ques.question;
-    });
-
-    setAllQuestions(allQuestions);
-    // start timer
-    setIsTimerRunning(true);
   };
 
   useEffect(() => {
-    // setAPIError(false);
-    // setIsTimerRunning(false);
-    // clearInterval(intervalTimer);
-    // setIsQuizOver(false);
-    // setTimer(30);
-    // setScore(0);
     clearClasses();
     fetchQuestions();
   }, []);
@@ -202,7 +211,7 @@ const QuizPage = ({ difficulty = "medium", noOfQuestions = 2 }) => {
             >
               <p>
                 {timer <= 0
-                  ? `Time's Up ${timer}`
+                  ? `Time's Up`
                   : timer < 10
                   ? `00:0${timer}`
                   : `00:${timer}`}
