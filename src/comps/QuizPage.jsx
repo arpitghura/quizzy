@@ -34,7 +34,7 @@ const QuizPage = () => {
   const nextBtn = document.querySelector("#nextBtn");
 
   const handleNext = () => {
-    if (currentQuestion + 1 === noOfQuestions) {
+    if (currentQuestion + 1 >= noOfQuestions) {
       setIsQuizOver(true);
       clearInterval(intervalTimer);
       nextBtn.innerText = "Finish";
