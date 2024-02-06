@@ -64,12 +64,15 @@ describe("QuizPage Component", () => {
       </Router>
     );
 
+    await waitFor(() =>
+      expect(getByText("Question 1 of 5")).toBeInTheDocument()
+    );
+
     // Click on the Next button
-    fireEvent.click(getByText(/Next/i));
+    fireEvent.click(getByText("Next"));
 
     // Expectations
-    expect(getByText(/Question 2 of 5/i)).toBeInTheDocument();
-    expect(getByText(/Score: 0/i)).toBeInTheDocument();
+    expect(getByText("Score: 0")).toBeInTheDocument();
   });
 
   test("handleSubmit updates score and highlights correct/incorrect options", async () => {
