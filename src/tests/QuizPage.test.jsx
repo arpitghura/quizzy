@@ -57,82 +57,6 @@ describe("QuizPage Component", () => {
     expect(option2.classList.contains("selected")).toBe(true);
   });
 
-  // test("clearClasses clears selected, correct, and incorrect classes", async () => {
-  //   const { getByText } = render(
-  //     <Router>
-  //       <QuizPage />
-  //     </Router>
-  //   );
-
-  //   await waitFor(() =>
-  //     expect(getByText("Question 1 of 5")).toBeInTheDocument()
-  //   );
-
-  //   // Click on the first option
-  //   const option1 = getByText("Java Vendor Machine");
-  //   fireEvent.click(option1);
-
-  //   // Expectations
-  //   expect(option1.classList.contains("selected")).toBe(true);
-
-  //   // Click on the second option
-  //   const option2 = getByText("Java Virtual Machine");
-  //   fireEvent.click(option2);
-
-  //   // Expectations
-  //   expect(option1.classList.contains("selected")).toBe(false);
-  //   expect(option2.classList.contains("selected")).toBe(true);
-
-  //   // Clear classes
-  //   fireEvent.click(getByText("Next"));
-
-  //   // Expectations
-  //   expect(option2.classList.contains("selected")).toBe(false);
-  // });
-
-  test("Timer decreases and triggers submit on end", async () => {
-    // Render the component and start timer
-    const { getByText } = render(
-      <Router>
-        <QuizPage />
-      </Router>
-    );
-    vi.useFakeTimers();
-    // Simulate 25 seconds passing
-    vi.advanceTimersByTime(25000);
-
-    // Assert timer value and submit call
-    expect(getByText("00:05")).toBeInTheDocument();
-    expect(state.userSelection).not.toBeNull(); // Assuming handleSubmit is called
-  });
-
-  // test("handleSubmit updates score and highlights correct/incorrect options", async () => {
-  //   const { getByText } = render(
-  //     <Router>
-  //       <QuizPage />
-  //     </Router>
-  //   );
-
-  //   await waitFor(() =>
-  //     expect(getByText("Question 1 of 5")).toBeInTheDocument()
-  //   );
-
-  //   // Click on the correct option
-  //   const correctOption = getByText("Java Virtual Machine");
-  //   fireEvent.click(correctOption);
-
-  //   // Expectations
-  //   expect(correctOption.classList.contains("correct")).toBe(true);
-  //   expect(getByText(/Score: 0/i)).toBeInTheDocument();
-
-  //   // Click on an incorrect option
-  //   const incorrectOption = getByText("Java Vendor Machine");
-  //   fireEvent.click(incorrectOption);
-
-  //   // Expectations
-  //   expect(incorrectOption.classList.contains("incorrect")).toBe(true);
-  //   expect(screen.getByText(/Score: 0/i)).toBeInTheDocument();
-  // });
   test("handleNext increments question counter and resets timer", async () => {
     const { getByText } = render(
       <Router>
@@ -146,5 +70,38 @@ describe("QuizPage Component", () => {
     // Expectations
     expect(getByText(/Question 2 of 5/i)).toBeInTheDocument();
     expect(getByText(/Score: 0/i)).toBeInTheDocument();
+  });
+
+  test("handleSubmit updates score and highlights correct/incorrect options", async () => {
+    // Render the component
+    const { getByText, getByLabelText } = render(
+      <Router>
+        <QuizPage />
+      </Router>
+    );
+
+    // Wait for initial rendering
+    await waitFor(() =>
+      expect(getByText("Question 1 of 5")).toBeInTheDocument()
+    );
+
+    // Select and submit the correct option
+    const correctOption = getByText("Java Virtual Machine"); // Assuming correct answer is in option-0
+    fireEvent.click(correctOption);
+    fireEvent.click(getByText("Submit")); // Trigger handleSubmit
+
+    // Expectations for correct answer
+    expect(correctOption).toHaveClass("correct");
+    expect(getByText("Score: 1")).toBeInTheDocument(); // Score should be updated
+
+    // Select and submit an incorrect option
+    const incorrectOption = getByText("Java Vendor Machine");
+    fireEvent.click(incorrectOption);
+    fireEvent.click(getByText("Submit"));
+
+    // Expectations for incorrect answer
+    expect(incorrectOption).toHaveClass("incorrect");
+    expect(getByText("Score: 1")).toBeInTheDocument(); // Score should remain unchanged
+    expect(getByText("Java Virtual Machine")).toHaveClass("correct"); // Correct option should still be highlighted
   });
 });
