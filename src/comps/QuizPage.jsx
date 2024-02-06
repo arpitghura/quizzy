@@ -242,7 +242,7 @@ const QuizPage = () => {
             <div className="options">
               <button
                 id="option1"
-                className="option bg-gray-500 py-2 px-4 rounded-lg w-full text-slate-100 text-lg text-left mb-3"
+                className="option bg-gray-500 select-none py-2 px-4 rounded-lg w-full text-slate-100 text-lg text-left mb-3"
                 onClick={handleOptionClick}
                 name={`option-${
                   allOptions[currentQuestion] && allOptions[currentQuestion][0]
@@ -252,7 +252,7 @@ const QuizPage = () => {
               </button>
               <button
                 id="option2"
-                className="option bg-gray-500 py-2 px-4 rounded-lg w-full text-slate-100 text-lg text-left mb-3"
+                className="option bg-gray-500 select-none py-2 px-4 rounded-lg w-full text-slate-100 text-lg text-left mb-3"
                 onClick={handleOptionClick}
                 name={`option-${
                   allOptions[currentQuestion] && allOptions[currentQuestion][1]
@@ -262,7 +262,7 @@ const QuizPage = () => {
               </button>
               <button
                 id="option3"
-                className="option bg-gray-500 py-2 px-4 rounded-lg w-full text-slate-100 text-lg text-left mb-3"
+                className="option bg-gray-500 py-2 px-4 select-none rounded-lg w-full text-slate-100 text-lg text-left mb-3"
                 onClick={handleOptionClick}
                 name={`option-${
                   allOptions[currentQuestion] && allOptions[currentQuestion][2]
@@ -272,7 +272,7 @@ const QuizPage = () => {
               </button>
               <button
                 id="option4"
-                className="option bg-gray-500 py-2 px-4 rounded-lg w-full text-slate-100 text-lg text-left mb-3"
+                className="option bg-gray-500 py-2 px-4 select-none rounded-lg w-full text-slate-100 text-lg text-left mb-3"
                 onClick={handleOptionClick}
                 name={`option-${
                   allOptions[currentQuestion] && allOptions[currentQuestion][3]
@@ -285,14 +285,14 @@ const QuizPage = () => {
 
           <div className="container options flex flex-row py-6 px-10">
             <button
-              className="py-2 px-6 bg-blue-600 text-white font-base text-lg rounded-lg mr-2 disabled:bg-blue-400"
+              className="py-2 px-6 bg-blue-600 text-white select-none font-base text-lg rounded-lg mr-2 disabled:bg-blue-400"
               onClick={handleSubmit}
               id="submitBtn"
             >
               Submit
             </button>
             <button
-              className="py-2 px-6 bg-violet-600 text-white font-base text-lg rounded-lg"
+              className="py-2 px-6 bg-violet-600 text-white select-none font-base text-lg rounded-lg"
               onClick={handleNext}
               id="nextBtn"
             >

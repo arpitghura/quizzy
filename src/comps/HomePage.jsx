@@ -61,7 +61,7 @@ const HomePage = () => {
       <Link
         to="/quiz"
         state={{ noOfQuestions, difficulty }}
-        className="py-2 px-6 bg-blue-600 text-white font-medium text-xl rounded-lg mt-4"
+        className="py-2 px-6 bg-blue-600 text-white font-medium text-xl select-none rounded-lg mt-4"
       >
         Start Quiz
       </Link>
