@@ -49,7 +49,7 @@ const QuizPage = () => {
     setTimer(30);
     setUserSelection(null);
     setIsTimerRunning(true);
-    // submitBtn?.disabled = false;
+    submitBtn.disabled = false;
     setCurrentQuestion((prev) => prev + 1);
   };
 
