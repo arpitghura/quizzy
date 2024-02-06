@@ -25,6 +25,8 @@ const QuizPage = () => {
   const [APIError, setAPIError] = useState(false);
   const intervalTimer = useRef(null);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const uri = `https://opentdb.com/api.php?amount=${noOfQuestions}&difficulty=${difficulty}&type=multiple`;
 
   const options = document.querySelectorAll(".option");
@@ -107,6 +109,7 @@ const QuizPage = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchQuestions = async () => {
       try {
         const res = await fetch(uri);
@@ -151,8 +154,10 @@ const QuizPage = () => {
         setAllOptions(allOptions);
         setAllQuestions(allQuestions);
         setIsTimerRunning(true);
+        setIsLoading(false);
       } catch (err) {
         console.log("Error Code:", err);
+        setIsLoading(false);
         setAPIError(true);
         return;
       }
@@ -190,7 +195,22 @@ const QuizPage = () => {
 
   return (
     <div>
-      {!APIError ? (
+      {isLoading && !APIError && (
+        <div className="flex flex-col justify-center items-center h-[100vh]">
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+          <h2 className="text-xl font-semibold">
+            Please Wait...Fetching Data from API.
+          </h2>
+        </div>
+      )}
+      {!APIError && !isLoading ? (
         <div className={`${isQuizOver && "hidden"}`}>
           <div className="options flex justify-between p-2 w-[100vw] bg-gray-800 shadow-lg shadow-gray-900">
             <div className="font-medium text-lg rounded-lg px-4 py-2">
