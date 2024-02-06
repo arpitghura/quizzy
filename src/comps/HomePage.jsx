@@ -27,7 +27,7 @@ const HomePage = () => {
           name="difficulty"
           id="difficulty"
           onChange={handleDifficultyChange}
-          className="p-2 rounded-lg border-2 border-gray-300"
+          className="p-2 rounded-lg border-2 border-gray-300 outline-none bg-gray-900"
         >
           <option value="easy" className="difficulty-levels">
             Easy
@@ -45,7 +45,7 @@ const HomePage = () => {
           name="noOfQuestions"
           id="noOfQuestions"
           onChange={handleQuestionsChange}
-          className="p-2 rounded-lg border-2 border-gray-300"
+          className="p-2 rounded-lg border-2 border-gray-300 outline-none bg-gray-900"
         >
           <option value="5" className="noOfQuestions-5">
             05
