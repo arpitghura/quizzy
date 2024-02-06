@@ -17,10 +17,8 @@ const HomePage = () => {
     <div className="flex flex-col justify-center items-center h-[100vh]">
       <h1 className="font-bold text-4xl p-2">Welcome to the Quiz App</h1>
       <p className="text-lg">Powered by the Open Trivia Database API</p>
-      <p className="text-lg text-blue-400 mt-2">
-        Choose Difficulty level and Number of Questions from below
-      </p>
-      <div className="flex justify-between gap-5 my-3">
+      <div className="flex justify-between gap-5 my-5 align-baseline items-center">
+        <label htmlFor="difficulty">Choose Difficulty Level</label>
         <select
           name="difficulty"
           id="difficulty"
@@ -38,6 +36,7 @@ const HomePage = () => {
           </option>
         </select>
 
+        <label htmlFor="noOfQuestions">Choose Number of Questions</label>
         <select
           name="noOfQuestions"
           id="noOfQuestions"

@@ -7,8 +7,8 @@ import serverDownImg from "/server_down.svg";
 const QuizPage = () => {
   const location = useLocation();
 
-  const noOfQuestions = location?.state?.noOfQuestions || 10;
-  const difficulty = location?.state?.difficulty || "medium";
+  const noOfQuestions = location?.state?.noOfQuestions || 5;
+  const difficulty = location?.state?.difficulty || "easy";
 
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [allOptions, setAllOptions] = useState([]);
@@ -49,7 +49,7 @@ const QuizPage = () => {
     setTimer(30);
     setUserSelection(null);
     setIsTimerRunning(true);
-    submitBtn.disabled = false;
+    // submitBtn?.disabled = false;
     setCurrentQuestion((prev) => prev + 1);
   };
 
