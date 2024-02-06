@@ -15,9 +15,13 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-[100vh]">
-      <h1 className="font-bold text-4xl p-2">Welcome to the Quiz App</h1>
-      <p className="text-lg">Powered by the Open Trivia Database API</p>
-      <div className="flex justify-between gap-5 my-5 align-baseline items-center">
+      <h1 className="font-bold text-4xl p-2 text-center">
+        Welcome to the Quiz App
+      </h1>
+      <p className="text-lg p-2 text-center">
+        Powered by the Open Trivia Database API
+      </p>
+      <div className="flex flex-col sm:flex-row justify-between gap-5 my-5 align-baseline items-center">
         <label htmlFor="difficulty">Choose Difficulty Level</label>
         <select
           name="difficulty"
