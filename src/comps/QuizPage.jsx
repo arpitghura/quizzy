@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import parse from "html-react-parser";
 import ResultPage from "./ResultPage";
 import { useLocation } from "react-router-dom";
+import serverDownImg from "/server_down.svg";
 
 const QuizPage = () => {
   const location = useLocation();
@@ -31,14 +32,10 @@ const QuizPage = () => {
   const nextBtn = document.querySelector("#nextBtn");
 
   const handleNext = () => {
-    // save user selection
-    // fetch next question
-
     if (currentQuestion + 1 === noOfQuestions) {
       setIsQuizOver(true);
       clearInterval(intervalTimer);
       nextBtn.innerText = "Finish";
-      console.log("Quiz Over from next");
       return;
     }
 
@@ -86,7 +83,6 @@ const QuizPage = () => {
     // stop timer
     setIsTimerRunning(false);
     clearInterval(intervalTimer);
-    console.log("User Selection: ", userSelection);
 
     // check if selected option is correct
     if (userSelection) {
@@ -110,58 +106,58 @@ const QuizPage = () => {
     }
   };
 
-  const fetchQuestions = async () => {
-    try {
-      const res = await fetch(uri);
-      const data = await res.json();
-
-      if (data.response_code !== 0) {
-        throw data.response_code;
-      }
-
-      console.log(data.results);
-
-      const correctAns = data.results.map((ques) => {
-        if (ques.correct_answer.includes("&")) {
-          return parse(ques.correct_answer);
-        }
-        return ques.correct_answer;
-      });
-
-      const allOptions = data.results.map((ques) => {
-        let options = [...ques.incorrect_answers, ques.correct_answer];
-        // check if options contain html entities
-        options = options
-          .map((option) => {
-            if (option.includes("&")) {
-              return parse(option);
-            }
-            return option;
-          })
-          .sort(() => Math.random() - 0.5);
-        return options;
-      });
-
-      const allQuestions = data.results.map((ques) => {
-        // check if question contains html entities
-        if (ques.question.includes("&")) {
-          return parse(ques.question);
-        }
-        return ques.question;
-      });
-
-      setCorrectAnswers(correctAns);
-      setAllOptions(allOptions);
-      setAllQuestions(allQuestions);
-      setIsTimerRunning(true);
-    } catch (err) {
-      console.log(err);
-      setAPIError(true);
-      return;
-    }
-  };
-
   useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch(uri);
+        const data = await res.json();
+
+        if (data.response_code !== 0) {
+          throw data.response_code;
+        }
+
+        console.log(data.results);
+
+        const correctAns = data.results.map((ques) => {
+          if (ques.correct_answer.includes("&")) {
+            return parse(ques.correct_answer);
+          }
+          return ques.correct_answer;
+        });
+
+        const allOptions = data.results.map((ques) => {
+          let options = [...ques.incorrect_answers, ques.correct_answer];
+          // check if options contain html entities
+          options = options
+            .map((option) => {
+              if (option.includes("&")) {
+                return parse(option);
+              }
+              return option;
+            })
+            .sort(() => Math.random() - 0.5);
+          return options;
+        });
+
+        const allQuestions = data.results.map((ques) => {
+          // check if question contains html entities
+          if (ques.question.includes("&")) {
+            return parse(ques.question);
+          }
+          return ques.question;
+        });
+
+        setCorrectAnswers(correctAns);
+        setAllOptions(allOptions);
+        setAllQuestions(allQuestions);
+        setIsTimerRunning(true);
+      } catch (err) {
+        console.log("Error Code:", err);
+        setAPIError(true);
+        return;
+      }
+    };
+
     clearClasses();
     fetchQuestions();
   }, []);
@@ -174,7 +170,6 @@ const QuizPage = () => {
       }, 1000);
     }
     if (!isTimerRunning || timer === 0) {
-      console.log("Timer Stopped");
       clearInterval(intervalTimer.current);
     }
   }, [isTimerRunning]);
@@ -190,7 +185,6 @@ const QuizPage = () => {
   useEffect(() => {
     if (isQuizOver) {
       clearInterval(intervalTimer);
-      console.log("Quiz Over");
     }
   }, [isQuizOver]);
 
@@ -271,14 +265,14 @@ const QuizPage = () => {
 
           <div className="container options flex flex-row py-6 px-10">
             <button
-              className="py-2 px-6 bg-blue-500 text-white font-base text-lg rounded-lg mr-2 disabled:bg-blue-400"
+              className="py-2 px-6 bg-blue-600 text-white font-base text-lg rounded-lg mr-2 disabled:bg-blue-400"
               onClick={handleSubmit}
               id="submitBtn"
             >
               Submit
             </button>
             <button
-              className="py-2 px-6 bg-violet-500 text-white font-base text-lg rounded-lg"
+              className="py-2 px-6 bg-violet-600 text-white font-base text-lg rounded-lg"
               onClick={handleNext}
               id="nextBtn"
             >
@@ -289,7 +283,7 @@ const QuizPage = () => {
       ) : (
         <div className="flex flex-col justify-center items-center h-[100vh] p-10">
           <img
-            src="/server_down.svg"
+            src={serverDownImg}
             alt="Server Error"
             height="500"
             width="500"

@@ -9,7 +9,7 @@ const ResultPage = ({ score = 0, totalScore = 0 }) => {
       </h1>
       <p className="text-lg">All the best for the next time!!</p>
       <Link
-        className="py-2 px-6 bg-blue-500 text-white font-medium text-xl rounded-lg mt-4"
+        className="py-2 px-6 bg-blue-500 text-white font-medium text-lg rounded-lg mt-4"
         to="/"
       >
         Go Home

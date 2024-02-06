@@ -1,11 +1,8 @@
-import { useState } from "react";
 import HomePage from "./comps/HomePage";
-
-import { Routes, Route, BrowserRouter } from "react-router-dom";
 import QuizPage from "./comps/QuizPage";
-import ResultPage from "./comps/ResultPage";
-import "./App.css";
 import Error404 from "./comps/error404";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import "./App.css";
 
 function App() {
   return (
