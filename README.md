@@ -1,7 +1,5 @@
 # Quiz App
 
-> Part of BlueMango Labs Assignment Work
-
 Build Using Open Trivia Database.
 
 ## Tech Stack
