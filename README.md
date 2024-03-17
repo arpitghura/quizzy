@@ -1,4 +1,4 @@
-# Quiz App
+# Quizzy - A multi-category quiz App
 
 Build Using Open Trivia Database.
 
