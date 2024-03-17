@@ -1,9 +1,37 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+const optionsData = [
+  {
+    label: 'All Categories' , value: 0
+  },
+  {
+    label: 'General Knowledge' , value: 9
+  },
+  {
+    label: 'Science & Nature' , value: 17
+  },
+  {
+    label: 'Sports' , value: 21
+  },
+  {
+    label: 'History' , value: 23
+  },
+  {
+    label: 'Celebrities' , value: 26
+  },
+  {
+    label: 'Geography' , value: 22
+  },
+  {
+    label: 'Politics' , value: 24
+  },
+]
+
 const HomePage = () => {
   const [difficulty, setDifficulty] = useState("easy");
   const [noOfQuestions, setNoOfQuestions] = useState(5);
+  const [category, setCategory] = useState();
 
   const handleDifficultyChange = (e) => {
     setDifficulty(e.target.value);
@@ -12,6 +40,11 @@ const HomePage = () => {
   const handleQuestionsChange = (e) => {
     setNoOfQuestions(e.target.value);
   };
+
+  const handleCategoryChange = (e) => {
+    console.log(e.target.value)
+    setCategory(e.target.value)
+  }
 
   return (
     <div className="flex flex-col justify-center items-center h-[100vh]">
@@ -58,9 +91,26 @@ const HomePage = () => {
           </option>
         </select>
       </div>
+      <div className="flex flex-col sm:flex-row justify-between gap-5 my-5 align-baseline items-center">
+      <label htmlFor="category">Choose Choose </label>
+        <select
+          name="category"
+          id="category"
+          onChange={handleCategoryChange}
+          className="p-2 rounded-lg border-2 border-gray-300 outline-none bg-gray-900"
+        >
+          {
+            optionsData.map(option => (
+              <option value={option.value} key={option.value}>
+                {option.label}
+              </option>
+            ))
+          }
+        </select>
+      </div>
       <Link
         to="/quiz"
-        state={{ noOfQuestions, difficulty }}
+        state={{ noOfQuestions, difficulty, category }}
         className="py-2 px-6 bg-blue-600 text-white font-medium text-xl select-none rounded-lg mt-4"
       >
         Start Quiz

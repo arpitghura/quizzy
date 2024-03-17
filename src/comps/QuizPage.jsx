@@ -9,6 +9,7 @@ const QuizPage = () => {
 
   const noOfQuestions = location?.state?.noOfQuestions || 5;
   const difficulty = location?.state?.difficulty || "easy";
+  const category = location?.state?.category || 0;
 
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [allOptions, setAllOptions] = useState([]);
@@ -27,7 +28,7 @@ const QuizPage = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const uri = `https://opentdb.com/api.php?amount=${noOfQuestions}&difficulty=${difficulty}&type=multiple`;
+  const uri = `https://opentdb.com/api.php?amount=${noOfQuestions}&difficulty=${difficulty}&category=${category}&type=multiple`;
 
   const options = document.querySelectorAll(".option");
   const submitBtn = document.querySelector("#submitBtn");
