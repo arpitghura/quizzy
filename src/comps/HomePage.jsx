@@ -92,7 +92,7 @@ const HomePage = () => {
         </select>
       </div>
       <div className="flex flex-col sm:flex-row justify-between gap-5 my-5 align-baseline items-center">
-      <label htmlFor="category">Choose Choose </label>
+      <label htmlFor="category">Choose Category </label>
         <select
           name="category"
           id="category"
