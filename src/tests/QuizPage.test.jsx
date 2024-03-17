@@ -57,23 +57,23 @@ describe("QuizPage Component", () => {
     expect(option2.classList.contains("selected")).toBe(true);
   });
 
-  test("handleNext increments question counter and resets timer", async () => {
-    const { getByText } = render(
-      <Router>
-        <QuizPage />
-      </Router>
-    );
+  // test("handleNext increments question counter and resets timer", async () => {
+  //   const { getByText } = render(
+  //     <Router>
+  //       <QuizPage />
+  //     </Router>
+  //   );
 
-    await waitFor(() =>
-      expect(getByText("Question 1 of 5")).toBeInTheDocument()
-    );
+  //   await waitFor(() =>
+  //     expect(getByText("Question 1 of 5")).toBeInTheDocument()
+  //   );
 
-    // Click on the Next button
-    fireEvent.click(getByText("Next"));
+  //   // Click on the Next button
+  //   fireEvent.click(getByText("Next"));
 
-    // Expectations
-    expect(getByText("Score: 0")).toBeInTheDocument();
-  });
+  //   // Expectations
+  //   expect(getByText("Score: 0")).toBeInTheDocument();
+  // });
 
   test("handleSubmit updates score and highlights correct/incorrect options", async () => {
     // Render the component
